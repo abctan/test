@@ -11,6 +11,15 @@ void de_copy(unsigned char *descLut, unsigned char *srcLut)
     *(descLut + 2) = GET_BITS(b, 4, 11);
 }
 
+void de_copy_step(unsigned char *descLut, unsigned char *srcLut, int step)
+{
+    unsigned short a = GET_BITS(*srcLut, 4, 7) | (*(srcLut + 1) << 4);
+    unsigned short b = *(srcLut + 2 + step) | (GET_BITS(*(srcLut + 3 + step), 0, 3) << 8);
+    *descLut = GET_BITS(a, 0, 7);
+    *(descLut + 1) = GET_BITS(a, 8, 11) | (GET_BITS(b, 0, 3) << 4);
+    *(descLut + 2) = GET_BITS(b, 4, 11);
+}
+
 
 void cp_one_plane_data(unsigned char *leftLut, unsigned char *rightLut, unsigned char *lut, int multTableH)
 {
